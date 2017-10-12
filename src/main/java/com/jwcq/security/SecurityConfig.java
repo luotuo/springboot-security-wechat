@@ -102,7 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 //任何访问都必须授权
                 .anyRequest().fullyAuthenticated()
                 //配置那些路径可以不用权限访问
-                .mvcMatchers("/login", "/login/wechat", "/").permitAll()
+                .mvcMatchers("/login", "/login/wechat").permitAll()
                 .and()
                 .formLogin()
                 //登陆成功后的处理，因为是API的形式所以不用跳转页面
@@ -190,6 +190,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 MappingJackson2HttpMessageConverter();
         customJsonMessageConverter.setSupportedMediaTypes(Arrays.asList(MediaType.TEXT_PLAIN));
         MyOAuth2ClientAuthenticationProcessingFilter filter = new MyOAuth2ClientAuthenticationProcessingFilter(path);
+        filter.setAllowSessionCreation(true);
         MyOAuth2RestTemplate template = new MyOAuth2RestTemplate(client.getClient(), oauth2ClientContext);
         template.setMessageConverters(Arrays.asList(customJsonMessageConverter));
         filter.setRestTemplate(template);
