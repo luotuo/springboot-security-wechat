@@ -65,7 +65,7 @@ public class MyPasswordEncoder implements PasswordEncoder {
 
     public boolean matches(CharSequence rawPassword, String encodedPassword) {
         if(encodedPassword != null && encodedPassword.length() != 0) {
-            return rawPassword.equals(encodedPassword);
+            return encode(rawPassword).equals(encodedPassword);
         } else {
             return false;
         }

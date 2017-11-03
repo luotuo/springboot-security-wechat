@@ -152,6 +152,7 @@ public class MyAuthorizationCodeAccessTokenProvider extends OAuth2AccessTokenSup
         MultiValueMap<String, String> form = new LinkedMultiValueMap();
         form.add("grant_type", "refresh_token");
         form.add("refresh_token", refreshToken.getValue());
+        form.add("appid", resource.getClientId());
 
         try {
             return this.retrieveToken(request, resource, form, this.getHeadersForTokenRequest(request));
@@ -201,6 +202,8 @@ public class MyAuthorizationCodeAccessTokenProvider extends OAuth2AccessTokenSup
 
     protected String getAccessTokenUri(OAuth2ProtectedResourceDetails resource, MultiValueMap<String, String> form) {
         String accessTokenUri = resource.getAccessTokenUri();
+        if (form.containsKey("refresh_token"))
+            accessTokenUri = "https://api.weixin.qq.com/sns/oauth2/refresh_token";
         if(this.logger.isDebugEnabled()) {
             this.logger.debug("Retrieving token from " + accessTokenUri);
         }
@@ -219,6 +222,8 @@ public class MyAuthorizationCodeAccessTokenProvider extends OAuth2AccessTokenSup
             }
         }
 
+        if (form.containsKey("refresh_token"))
+            return builder.toString();
         return builder.toString() + "#wechat_redirect";
     }
 
@@ -239,6 +244,14 @@ public class MyAuthorizationCodeAccessTokenProvider extends OAuth2AccessTokenSup
 
     private MultiValueMap<String, String> getParametersForTokenRequest(AuthorizationCodeResourceDetails resource, AccessTokenRequest request) {
         MultiValueMap<String, String> form = new LinkedMultiValueMap();
+        String state = request.getStateKey();
+//        if (state.contains("session")) {
+//            form.set("appid", resource.getClientId());
+//            form.set("secret", resource.getClientSecret());
+//        } else {
+//            form.set("appid", "wx38871ac04c8208af");
+//            form.set("secret", "50f7e835165d91006bf32fb3ba8d53dd");
+//        }
         form.set("appid", resource.getClientId());
         form.set("secret", resource.getClientSecret());
         form.set("code", request.getAuthorizationCode());
@@ -336,4 +349,3 @@ public class MyAuthorizationCodeAccessTokenProvider extends OAuth2AccessTokenSup
         return new UserApprovalRequiredException(resource.getUserAuthorizationUri(), Collections.singletonMap("user_oauth_approval", message), resource.getClientId(), resource.getScope());
     }
 }
-
