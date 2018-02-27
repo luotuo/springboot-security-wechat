@@ -1,8 +1,10 @@
 package com.jwcq.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jwcq.config.*;
 import com.jwcq.custom.*;
 
+import com.jwcq.global.result.Response;
 import com.jwcq.service.PrivilegeConfigService;
 import com.jwcq.service.UserPrivilegeService;
 import com.jwcq.service.UserService;
@@ -67,6 +69,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -151,6 +154,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                     HttpServletResponse response, Authentication authentication)
                 throws IOException, ServletException {
             //Do nothing!
+            ObjectMapper mapper = new ObjectMapper();
+            response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+            response.setHeader("Access-Control-Allow-Credentials", "true");
+            response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+            response.setHeader("Access-Control-Max-Age", "3600");
+            response.setHeader("Access-Control-Allow-Headers", "X-Request-With, JWCQ, Origin,Content-Type");
+            response.setContentType("text/plain;charset='utf-8'");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(200);
+
+            // Our ajax request, redirect it to login web page
+            Response response1 = new Response();
+            response1.setSuccess(1);
+            response1.setMessage("success");
+            response1.setResult("登出成功");
+            String responseStr = "";
+            PrintWriter out = response.getWriter();
+            try {
+                responseStr = mapper.writeValueAsString(response1);
+                out.append(responseStr);
+            } catch (IOException ioe) {
+                // FIXME: Add log here!
+                out.append(ioe.toString());
+            }
+            out.close();
         }
     }
 
