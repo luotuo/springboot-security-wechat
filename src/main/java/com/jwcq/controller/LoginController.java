@@ -12,6 +12,11 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 public class LoginController {
     @RequestMapping(method= {RequestMethod.GET,RequestMethod.POST}, value = "/")
+    /**
+     * 如果使用HTML head中
+     * <html><head><meta http-equiv=\"refresh\" content=\"1;url=%s\"></head><body></body></html>
+     * 增加ResponseBody注解
+     */
     public String login(HttpServletRequest request) {
         return "index";
     }
