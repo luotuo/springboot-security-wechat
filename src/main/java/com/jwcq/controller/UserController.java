@@ -1,39 +1,24 @@
 package com.jwcq.controller;
 
-import com.google.common.io.Files;
-import com.jwcq.MyExceptions.NullException;
-import com.jwcq.config.Global;
-import com.jwcq.service.PrivilegeConfigService;
-import com.jwcq.service.UserPrivilegeService;
-import com.jwcq.service.UserRoleService;
 import com.jwcq.user.entity.*;
 import com.jwcq.global.result.Response;
 import com.jwcq.service.UserService;
-import com.jwcq.MyExceptions.AlreadyExistException;
-
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Matcher;
+
 
 /**
  * Created by luotuo on 17-7-4.
  */
 @Controller
 @RequestMapping("/user")
-@Api(description = "用户管理")
 public class UserController extends BaseController {
     @Autowired
     private UserService userService;
@@ -58,7 +43,6 @@ public class UserController extends BaseController {
         return successResponse("登录用户信息", userResponse);
     }
 
-    @ApiOperation(value = "编辑用户", notes = "编辑一个用户")
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/edit")
     @ResponseBody
     public Response edit(@RequestParam(value = "id", required = true) String i,
@@ -76,7 +60,6 @@ public class UserController extends BaseController {
         return successResponse("选择成功", user);
     }
 
-    @ApiOperation(value = "获取用户权限", notes = "获取用户的所有权限")
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/getPrivileges")
     @ResponseBody
     public Response getPrivileges(@RequestParam(value = "id", required = true, defaultValue = "") String id,
@@ -97,7 +80,6 @@ public class UserController extends BaseController {
     }
 
 
-    @ApiOperation(value = "获取用户角色", notes = "获取用户的所有角色")
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/getRoles")
     @ResponseBody
     public Response getRoles(@RequestParam(value = "id", required = true, defaultValue = "") String id,
@@ -117,7 +99,6 @@ public class UserController extends BaseController {
         return successResponse("获取成功", userRoles);
     }
 
-    @ApiOperation(value = "修改用户密码", notes = "修改用户密码")
     @RequestMapping(method = {RequestMethod.POST}, value = "/setPassword")
     @ResponseBody
     public Response setPassword(@RequestParam(value = "oldPassword") String oldPassword,
@@ -134,7 +115,6 @@ public class UserController extends BaseController {
         return successResponse("设置成功", null);
     }
 
-    @ApiOperation(value = "重置用户密码", notes = "重置用户密码")
     @RequestMapping(method = {RequestMethod.POST}, value = "/resetPassword")
     @ResponseBody
     public Response setPassword(@RequestParam(value = "userId") String userId,
@@ -147,7 +127,6 @@ public class UserController extends BaseController {
         return successResponse("重置成功", null);
     }
 
-    @ApiOperation(value = "绑定微信接口", notes = "绑定微信接口")
     @RequestMapping(method = {RequestMethod.POST}, value = "/bindWechat")
     @ResponseBody
     public Response bindWechat(HttpServletRequest request) {
@@ -162,7 +141,6 @@ public class UserController extends BaseController {
         return successResponse("绑定成功", userResponse);
     }
 
-    @ApiOperation(value = "用户注册接口", notes = "用户注册接口")
     @RequestMapping(method = {RequestMethod.POST}, value = "/join")
     @ResponseBody
     public Response joinOpen(@RequestParam(value = "name") String name,
@@ -181,7 +159,6 @@ public class UserController extends BaseController {
         return successResponse("注册成功", userResponse);
     }
 
-    @ApiOperation(value = "微信扫描后用户注册接口", notes = "微信扫描后用户注册接口")
     @RequestMapping(method = {RequestMethod.POST}, value = "/wechatJoin")
     @ResponseBody
     public Response wechatJoin(@RequestParam(value = "name") String name,

@@ -1,12 +1,9 @@
 package com.jwcq.controller;
-import com.google.common.collect.Maps;
 import com.jwcq.config.Global;
 import com.jwcq.custom.UserInfo;
 import com.jwcq.global.result.Response;
-import com.jwcq.service.UserRoleService;
 import com.jwcq.service.UserService;
 import com.jwcq.user.entity.User;
-import com.jwcq.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.ServletRequestUtils;
-
-import java.io.IOException;
-import java.util.*;
-import java.util.regex.Pattern;
 
 /**
  * Created by luotuo on 17-6-1.
@@ -32,24 +25,9 @@ public class BaseController {
     //日志系统
     public final Logger mlogger = LoggerFactory.getLogger(this.getClass());
 
-    protected static Pattern pattern = Pattern.compile("^(jpg)|(jpeg)|(png)|(bmp)$");
-    protected static Map<String, String> contentType;
-    protected String iconPath;
-
-    static {
-        contentType = Maps.newConcurrentMap();
-        contentType.put("image/x-icon", ".ico");
-        contentType.put("image/jpeg", ".jpg");
-        contentType.put("image/png", ".png");
-    }
 
     @Autowired
     UserService userService;
-
-
-
-    @Autowired
-    private UserRoleService userRoleService;
 
 
     public Long getUserId() {
@@ -94,20 +72,6 @@ public class BaseController {
             result = 0;
         response.setResult(result);
         return response;
-    }
-
-    public Response lockedResponse(String message, Object result) {
-        if (message == null) message = "资源正在被占用";
-        Response response = new Response();
-        response.setSuccess(Response.RESOURCELOCKED);
-        response.setMessage(message);
-        if (result == null) result = 0;
-        response.setResult(result);
-        return response;
-    }
-
-    //Log 日志
-    public void Logger(String message) {
     }
 
     /**
