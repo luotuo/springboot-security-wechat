@@ -9,8 +9,8 @@
     <packaging>jar</packaging>
     <!--<packaging>war</packaging>-->
 
-    <name>3audit-open</name>
-    <description>3audit-open</description>
+    <name>luotuo-open</name>
+    <description>luotuo-open</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>

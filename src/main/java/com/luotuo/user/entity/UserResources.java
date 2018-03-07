@@ -34,12 +34,19 @@ public class UserResources {
     @Column(name = "resource_type", columnDefinition = "not null default ''")
     private String resourceType;
 
+    /**
+     * 资源名称
+     */
+    @Column(name = "resource_name")
+    private String resourceName;
+
     public UserResources() {}
 
-    public UserResources(long userId, long resourceOriginId, String resourceType) {
+    public UserResources(long userId, long resourceOriginId, String resourceType, String name) {
         this.userId = userId;
         this.resourceOriginId = resourceOriginId;
         this.resourceType = resourceType;
+        this.resourceName = name;
         this.resourceId = EncryptionAlgs.getMD5(resourceType + resourceOriginId);
     }
 
@@ -48,5 +55,6 @@ public class UserResources {
         this.resourceId = resource.getResourceId();
         this.resourceType = resource.getResourceType();
         this.resourceOriginId = resource.getResourceOriginId();
+        this.resourceName = resource.getResourceName();
     }
 }

@@ -1,5 +1,6 @@
 package com.luotuo.user.entity;
 
+import com.luotuo.global.EncryptionAlgs;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -27,4 +28,18 @@ public class Resource {
      */
     @Column(name = "resource_origin_id", columnDefinition = "not null default 0")
     private long resourceOriginId;
+    /**
+     * 资源名称
+     */
+    @Column(name = "resource_name")
+    private String resourceName;
+
+    public Resource() {}
+
+    public Resource(String type, long resourceOriginId, String name) {
+        this.resourceOriginId = resourceOriginId;
+        this.resourceType = type;
+        this.resourceId = EncryptionAlgs.getMD5(type + resourceOriginId);
+        this.resourceName = name;
+    }
 }
