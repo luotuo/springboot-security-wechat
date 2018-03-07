@@ -18,6 +18,12 @@ public class UserResources {
      */
     @Column(name = "user_id")
     private long userId;
+
+    /**
+     * 用户名
+     */
+    @Column(name = "user_name")
+    private String userName;
     /**
      * 资源唯一id，由资源类型+资源原始id经过md5得到
      */
@@ -42,16 +48,18 @@ public class UserResources {
 
     public UserResources() {}
 
-    public UserResources(long userId, long resourceOriginId, String resourceType, String name) {
-        this.userId = userId;
+    public UserResources(User user, long resourceOriginId, String resourceType, String name) {
+        this.userId = user.getId();
         this.resourceOriginId = resourceOriginId;
         this.resourceType = resourceType;
         this.resourceName = name;
         this.resourceId = EncryptionAlgs.getMD5(resourceType + resourceOriginId);
+        this.userName = user.getName();
     }
 
-    public UserResources(long userId, Resource resource) {
-        this.userId = userId;
+    public UserResources(User user, Resource resource) {
+        this.userId = user.getId();
+        this.userName = user.getName();
         this.resourceId = resource.getResourceId();
         this.resourceType = resource.getResourceType();
         this.resourceOriginId = resource.getResourceOriginId();

@@ -62,7 +62,11 @@ public class ResourceService {
             else
                 conditions = conditions.and(SpecificationFactory.containsLike("resource_type", resourceType));
         }
-        Page<Resource> page1 = resourceRepository.findAll(conditions, pageRequest);
+        Page<Resource> page1 = null;
+        if (conditions == null)
+            page1 = resourceRepository.findAll(pageRequest);
+        else
+            page1 = resourceRepository.findAll(conditions, pageRequest);
         return page1;
     }
 }
