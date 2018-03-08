@@ -3,6 +3,7 @@ package com.luotuo.service;
 import com.luotuo.global.EncryptionAlgs;
 import com.luotuo.user.entity.Resource;
 import com.luotuo.user.repository.ResourceRepository;
+import com.luotuo.user.repository.UserResourcesRepository;
 import com.luotuo.utils.SpecificationFactory;
 import com.luotuo.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ResourceService {
     @Autowired
     private ResourceRepository resourceRepository;
+    @Autowired
+    private UserResourcesRepository userResourcesRepository;
 
     public Resource add(String resourceType, Long resourceOriginId, String resourceName) throws Exception {
         if (StringUtils.isNotBlank(resourceType) || resourceOriginId == null)
@@ -26,6 +29,7 @@ public class ResourceService {
         return resourceRepository.save(resource);
     }
 
+    @Transactional
     public void delete(String resourceType, Long resourceOriginId) throws Exception {
         if (StringUtils.isNotBlank(resourceType) || resourceOriginId == null)
             throw new Exception("资源类型或资源原始id都不能为空");
@@ -34,6 +38,10 @@ public class ResourceService {
         if (resource == null)
             throw new Exception("无此资源");
         resourceRepository.delete(resource.getId());
+        /**
+         * delete all user resources
+         */
+        userResourcesRepository.deleteByResourceId(resourceId);
     }
 
     public Object findById(Long id) throws Exception {
