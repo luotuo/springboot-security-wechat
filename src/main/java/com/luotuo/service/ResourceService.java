@@ -16,8 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.context.ContextLoader;
-import org.springframework.web.context.WebApplicationContext;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -64,6 +62,15 @@ public class ResourceService {
         return resource;
     }
 
+    /**
+     * @name 搜索资源
+     * @param resourceType 资源类型
+     * @param resourceName 资源名称
+     * @param page 分页的页码
+     * @param size 每页的数量
+     * @return
+     * @throws Exception
+     */
     public Object search(String resourceType,
                          String resourceName,
                          int page,
