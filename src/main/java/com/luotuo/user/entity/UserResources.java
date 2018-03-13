@@ -32,12 +32,12 @@ public class UserResources {
     /**
      * 资源原始id
      */
-    @Column(name = "resource_origin_id", columnDefinition = "not null default 0")
+    @Column(name = "resource_origin_id", columnDefinition = "bigint not null default 0")
     private long resourceOriginId;
     /**
      * 资源类型
      */
-    @Column(name = "resource_type", columnDefinition = "not null default ''")
+    @Column(name = "resource_type", columnDefinition = "char(50) not null default ''")
     private String resourceType;
 
     /**

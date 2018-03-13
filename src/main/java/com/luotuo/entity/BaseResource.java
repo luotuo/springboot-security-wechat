@@ -25,7 +25,7 @@ public class BaseResource {
     /**
      * 类型
      */
-    @Column(columnDefinition = "not null default ''")
+    @Column(columnDefinition = "char(50) not null default ''")
     protected String type;
     /**
      * 资源是否被添加进资源列表
