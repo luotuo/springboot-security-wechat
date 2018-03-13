@@ -228,29 +228,28 @@ public class PackageUtil {
 
     public static void main(String []args) {
         List<Class<?>> classes = getClass("com.luotuo.user", true);
-        for (Class c : classes) {
-//            System.out.println("super class == " + c.getSuperclass().getName());
-//            System.out.println("name == " + c.getName());
-            //WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
-            System.out.println((System.getProperty("user.dir")));
-            ApplicationContext apx = new ClassPathXmlApplicationContext("/applicationContext.xml");
-            try {
-                if ("com.luotuo.user.entity.User".equals(c.getName())) {
-                    Class aClass = apx.getBean("UserService").getClass();
-                    Object obj = aClass.newInstance();
-                    Method []methods = aClass.getMethods();
-                    for (Method m : methods) {
-                        System.out.println("method name == " + m.getName());
-                        if (m.getName().equals("getUserById")) {
-                            Object o = m.invoke(apx.getBean("UserService"));
-                            System.out.println("o == " + o.getClass());
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//        for (Class c : classes) {
+////            System.out.println("super class == " + c.getSuperclass().getName());
+////            System.out.println("name == " + c.getName());
+//            //WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
+//            System.out.println((System.getProperty("user.dir")));
+//            //ApplicationContext apx = new ClassPathXmlApplicationContext("/applicationContext.xml");
+//            try {
+//                if ("com.luotuo.user.entity.User".equals(c.getName())) {
+//                    Class aClass = apx.getBean("UserService").getClass();
+//                    Object obj = aClass.newInstance();
+//                    Method []methods = aClass.getMethods();
+//                    for (Method m : methods) {
+//                        System.out.println("method name == " + m.getName());
+//                        if (m.getName().equals("getUserById")) {
+//                            Object o = m.invoke(apx.getBean("UserService"));
+//                            System.out.println("o == " + o.getClass());
+//                        }
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
 
-        }
     }
 }

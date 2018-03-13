@@ -27,4 +27,9 @@ public class BaseResource {
      */
     @Column(columnDefinition = "not null default ''")
     protected String type;
+    /**
+     * 资源是否被添加进资源列表
+     */
+    @Column(name = "is_used")
+    protected int isUsed;
 }
