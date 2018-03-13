@@ -32,4 +32,9 @@ public class BaseResource {
      */
     @Column(name = "is_used")
     protected int isUsed;
+    /**
+     * 资源唯一id，由资源类型+资源原始id经过md5得到
+     */
+    @Column(name = "resource_id")
+    protected String resourceId;
 }

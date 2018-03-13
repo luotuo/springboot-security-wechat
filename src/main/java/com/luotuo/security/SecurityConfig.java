@@ -102,6 +102,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
+                .mvcMatchers("/**").permitAll()
                 //任何访问都必须授权
                 .anyRequest().fullyAuthenticated()
                 //配置那些路径可以不用权限访问

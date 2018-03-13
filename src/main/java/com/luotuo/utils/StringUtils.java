@@ -104,4 +104,20 @@ public class StringUtils {
         return code;
     }
 
+    public static String toLowerCaseFirstOne(String s) {
+        if(Character.isLowerCase(s.charAt(0)))
+            return s;
+        char[] cs = s.toCharArray();
+        cs[0] += 32;
+        return String.valueOf(cs);
+    }
+
+    public static String toUpperCaseFirstOne(String s) {
+        if(Character.isUpperCase(s.charAt(0)))
+            return s;
+        char[] cs = s.toCharArray();
+        cs[0] -= 32;
+        return String.valueOf(cs);
+    }
+
 }

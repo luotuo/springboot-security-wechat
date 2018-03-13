@@ -1,7 +1,9 @@
 package com.luotuo.user.entity;
 
+import com.luotuo.entity.BaseResource;
 import com.luotuo.global.EncryptionAlgs;
 import lombok.Data;
+import org.codehaus.jackson.map.Serializers;
 
 import javax.persistence.*;
 
@@ -41,5 +43,12 @@ public class Resource {
         this.resourceType = type;
         this.resourceId = EncryptionAlgs.getMD5(type + resourceOriginId);
         this.resourceName = name;
+    }
+
+    public Resource(BaseResource baseResource) {
+        this.resourceOriginId = baseResource.getId();
+        this.resourceName = baseResource.getName();
+        this.resourceType = baseResource.getType();
+        this.resourceId = EncryptionAlgs.getMD5(this.resourceType + this.resourceOriginId);
     }
 }

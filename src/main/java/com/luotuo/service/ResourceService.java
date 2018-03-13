@@ -1,5 +1,6 @@
 package com.luotuo.service;
 
+import com.luotuo.entity.BaseResource;
 import com.luotuo.global.EncryptionAlgs;
 import com.luotuo.user.entity.Resource;
 import com.luotuo.user.repository.ResourceRepository;
@@ -8,6 +9,7 @@ import com.luotuo.utils.PackageUtil;
 import com.luotuo.utils.SpecificationFactory;
 import com.luotuo.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -29,6 +31,9 @@ public class ResourceService {
     private ResourceRepository resourceRepository;
     @Autowired
     private UserResourcesRepository userResourcesRepository;
+
+    @Autowired
+    ApplicationContext context;
 
     public Resource add(String resourceType, Long resourceOriginId, String resourceName) throws Exception {
         if (StringUtils.isNotBlank(resourceType) || resourceOriginId == null)
@@ -63,6 +68,7 @@ public class ResourceService {
                          String resourceName,
                          int page,
                          int size) throws Exception {
+        addResourcesAuto();
         Sort sort = new Sort(Sort.Direction.DESC, "id");
         PageRequest pageRequest = new PageRequest(page, size, sort);
         Specifications<Resource> conditions = null;
@@ -92,45 +98,45 @@ public class ResourceService {
      * @throws Exception
      */
     private void addResourcesAuto() throws Exception {
-        List<Class<?>> classes = PackageUtil.getClass("com.luotuo.user", true);
+        List<Class<?>> classes = PackageUtil.getClass("com.luotuo", true);
         if (classes.isEmpty())
             return;
-        WebApplicationContext wac = ContextLoader.getCurrentWebApplicationContext();
         List<Resource> resources = resourceRepository.findAll();
         Map<String, Resource> resourceMap = new HashMap<>();
         for (Resource r : resources) {
             resourceMap.put(r.getResourceId(), r);
         }
+        String []beanNames = context.getBeanDefinitionNames();
+        for (String beanName : beanNames) {
+            System.out.println("bean name == " + beanName);
+        }
         for (Class c : classes) {
             Class superClass = c.getSuperclass();
             if (superClass == null)
-                return;
+                continue;
             if (!"com.luotuo.entity.BaseResource".equals(superClass.getName()))
                 continue;
-            String []cPackage = c.getName().split(",");
+            String []cPackage = c.getName().split("\\.");
             if (cPackage.length <= 0)
-                return;
+                continue;
             String serviceName = cPackage[cPackage.length -1] + "Service";
-            Class serviceClass = wac.getBean(serviceName).getClass();
-            if (serviceClass == null)
-                return;
-            Object serviceObject = serviceClass.newInstance();
-            if (serviceObject == null)
-                return;
-            Method serviceFindAllMethod = serviceClass.getMethod("findAll");
+            Object objBean = context.getBean(StringUtils.toLowerCaseFirstOne(serviceName));
+            Method serviceFindAllMethod = objBean.getClass().getMethod("findAll");
             if (serviceFindAllMethod == null)
-                return;
-            List<Resource> resourceList = (List<Resource>)serviceFindAllMethod.invoke(serviceObject, null);
-            for (Resource r : resourceList) {
+                continue;
+            List<BaseResource> resourceList = (List<BaseResource>)serviceFindAllMethod.invoke(objBean);
+            for (BaseResource r : resourceList) {
                 if (resourceMap.containsKey(r.getResourceId())) {
-                    if (r.getResourceName().equals(resourceMap.get(r.getResourceId())))
+                    if (r.getName().equals(resourceMap.get(r.getResourceId())))
                         continue;
-                    resourceMap.get(r.getResourceId()).setResourceName(r.getResourceName());
+                    resourceMap.get(r.getResourceId()).setResourceName(r.getName());
                 } else {
-                    resources.add(r);
+                    Resource resource = new Resource(r);
+                    resources.add(resource);
                 }
             }
         }
-        resourceRepository.save(resources);
+        if (!resources.isEmpty())
+            resourceRepository.save(resources);
     }
 }
