@@ -17,6 +17,15 @@ public class ResourceController extends BaseController {
     @Autowired
     private ResourceService resourceService;
 
+    /**
+     * @name 查询资源
+     * @param resourceType 资源类型
+     * @param resourceName 资源名称
+     * @param page 分页的页码
+     * @param size 每页大小
+     * @param request
+     * @return
+     */
     @RequestMapping(method = {RequestMethod.GET, RequestMethod.POST}, value = "/search")
     @ResponseBody
     public Response search(@RequestParam(value = "resourceType", required = false, defaultValue = "") String resourceType,
